@@ -5,6 +5,7 @@ class DockingStation
   attr_reader :bike
 
   def dock(bike)
+    fail "Bike already docked" if @bike
     @bike = bike
   end
 

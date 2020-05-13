@@ -21,6 +21,12 @@ describe DockingStation do
 
   end
 
+  it 'raises an error' do
+    bike = Bike.new
+    subject.dock(bike)
+    expect {subject.dock(bike)}.to raise_error "Bike already docked"
+  end
+
   it 'should allow bikes to be docked' do
     expect(subject).to respond_to(:dock)
   end
