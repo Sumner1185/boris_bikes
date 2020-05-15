@@ -2,7 +2,7 @@ require_relative 'bike'
 
 class DockingStation
   DEFAULT_CAPACITY = 20
-  attr_reader :bikes 
+  attr_reader :bikes
 
   def initialize(capacity=DEFAULT_CAPACITY)
     @bikes = []
@@ -16,7 +16,7 @@ class DockingStation
 
   def release_bike
     fail "No bikes available" if empty?
-    @bikes.pop
+    @bikes.sort_by{ |bike| bike.working? }.pop
   end
 
   private
@@ -25,6 +25,8 @@ class DockingStation
   end
 
   def empty?
-    @bikes.empty?
+    number_working = 0
+    @bikes.each { |bike| number_working += 1 if bike.working?  }
+    number_working == 0
   end
 end
