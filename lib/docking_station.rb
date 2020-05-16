@@ -5,28 +5,30 @@ class DockingStation
   attr_reader :bikes
 
   def initialize(capacity=DEFAULT_CAPACITY)
-    @bikes = []
+    @working_bikes = []
+    @broken_bikes = []
     @capacity = capacity
   end
 
-  def dock(bikes)
+  def dock(bike)
     fail "No space available" if full?
-    @bikes.push(bikes)
+    sort_bike(bike)
   end
 
   def release_bike
     fail "No bikes available" if empty?
-    @bikes.sort_by{ |bike| bike.working? }.pop
+    @working_bikes.pop
   end
 
   private
+  def sort_bike(bike)
+    bike.working? ? @working_bikes.push(bike) : @broken_bikes.push(bike)
+  end
   def full?
-    @bikes.length == @capacity
+    (@working_bikes + @broken_bikes).length == @capacity
   end
 
   def empty?
-    number_working = 0
-    @bikes.each { |bike| number_working += 1 if bike.working?  }
-    number_working == 0
+    @working_bikes.empty?
   end
 end

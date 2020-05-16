@@ -16,21 +16,28 @@ describe DockingStation do
   end
 
   describe '#release_bike' do
+    let(:bike) {Bike.new}
+
     it 'releases a bike' do
-      bikes = Bike.new
-      subject.dock(bikes)
-      expect(subject.release_bike).to eq bikes
+      subject.dock(bike)
+      expect(subject.release_bike).to eq bike
     end
     it 'Raises an error when no bikes availabe' do
       expect{ subject.release_bike }.to raise_error "No bikes available"
     end
     it "should not release a broken bike" do
-      bike_broken = Bike.new
-      bike_broken.report_broken
-      subject.dock(bike_broken)
+      broken_bike = bike.report_broken
+      subject.dock(broken_bike)
       expect{ subject.release_bike }.to raise_error "No bikes available"
     end
 
+    it 'should only release working bikes' do
+      broken_bike = Bike.new
+      broken_bike.report_broken
+      subject.dock(bike)
+      subject.dock(broken_bike)
+      expect(subject.release_bike).to eq bike
+    end
   end
 
   describe '#dock' do
